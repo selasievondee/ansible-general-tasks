@@ -41,8 +41,8 @@
   - name: Clear temporary storage
     command: rm -rf /tmp/*
 
-  - name: Clear memory
-    command: sync && echo 3 > /proc/sys/vm/drop_caches
+  # - name: Clear memory
+  #   command: sync && echo 3 > /proc/sys/vm/drop_caches
 
   - name: Clean up Docker
     command: docker system prune --all --force
