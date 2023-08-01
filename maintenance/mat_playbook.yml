@@ -35,17 +35,17 @@
   # - name: Check the system logs
   #   command: journalctl
 
-  # - name: Back up the system
-  #   apt:
-  #     name: backuppc
-  #     state: present
-  #     only_if: '! dpkg -l | grep -q "^ii backuppc"'
+  - name: Back up the system
+    apt:
+      name: backuppc
+      state: present
+      only_if: '! dpkg -l | grep -q "^ii backuppc"'
 
-  # - name: Scan for viruses and malware
-  #   apt:
-  #     name: clamav
-  #     state: present
-  #     only_if: '! dpkg -l | grep -q "^ii clamav"'
+  - name: Scan for viruses and malware
+    apt:
+      name: clamav
+      state: present
+      only_if: '! dpkg -l | grep -q "^ii clamav"'
 
   # - name: Monitor the system resources
   #   command: top
