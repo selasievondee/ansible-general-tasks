@@ -37,3 +37,32 @@
       state: present
     command: apt-get autoclean
     command: apt-get autoremove
+
+  - name: Clear temporary storage
+    command: rm -rf /tmp/*
+
+  - name: Clear memory
+    command: sync && echo 3 > /proc/sys/vm/drop_caches
+
+  - name: Clean up Docker
+    command: docker system prune --all --force
+
+  - name: Display system status
+    command: systemctl status docker
+    register: docker_status
+
+  - name: Display memory usage
+    command: free -h
+    register: memory_usage
+
+  - name: Display temporary storage usage
+    command: df -h /tmp
+    register: tmp_storage_usage
+
+  - name: Display output of all tasks
+    debug:
+      var: "{{ item }}"
+    with_items:
+      - docker_status.stdout
+      - memory_usage.stdout
+      - tmp_storage_usage.stdout
