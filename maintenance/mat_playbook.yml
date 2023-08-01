@@ -32,14 +32,45 @@
     debug:
       var: journalctl_output.stdout
 
-  # - name: Check the system logs
-  #   command: journalctl
-
-  - name: Back up the system
+  - name: Install BackupPC
     apt:
       name: backuppc
       state: present
-      only_if: '! dpkg -l | grep -q "^ii backuppc"'
+
+  # Backup PC
+
+  - name: Create BackupPC configuration file
+    template:
+      src: backuppc.conf.j2
+      dest: /etc/backuppc/backuppc.conf
+
+  - name: Start BackupPC service
+    service:
+      name: backuppc
+      state: started
+      enabled: yes
+
+  - name: Restart BackupPC service
+    service:
+      name: backuppc
+      state: restarted
+
+  - name: Check BackupPC service status
+    command: service backuppc status
+    register: backuppc_status
+
+  - name: Display BackupPC service status
+    debug:
+      var: backuppc_status.stdout
+
+  # - name: Check the system logs
+  #   command: journalctl
+
+  # - name: Back up the system
+  #   apt:
+  #     name: backuppc
+  #     state: present
+  #     only_if: '! dpkg -l | grep -q "^ii backuppc"'
 
   # - name: Scan for viruses and malware
   #   apt:
