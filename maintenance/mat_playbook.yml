@@ -1,0 +1,52 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: Update the package cache
+    apt:
+      update_cache: yes
+
+  - name: Upgrade all packages
+    apt:
+      upgrade: dist
+
+  - name: Check if a reboot is required
+    stat:
+      path: /var/run/reboot-required
+      get_md5: no
+    register: reboot_required_file
+
+  - name: Reboot the server (if required)
+    reboot:
+      when: reboot_required_file.stat.exists == true
+
+  - name: Remove unused packages
+    apt:
+      autoremove: yes
+
+  - name: Check the system logs
+    command: journalctl
+
+  - name: Back up the system
+    apt:
+      name: backuppc
+      state: present
+      only_if: '! dpkg -l | grep -q "^ii backuppc"'
+
+  - name: Scan for viruses and malware
+    apt:
+      name: clamav
+      state: present
+      only_if: '! dpkg -l | grep -q "^ii clamav"'
+
+  - name: Monitor the system resources
+    command: top
+
+  - name: Monitor the system resources - Quit
+    command: q
+
+  - name: Optimize the system
+    apt:
+      name: apt-utils
+      state: present
+    command: apt-get autoclean
+    command: apt-get autoremove
