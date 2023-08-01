@@ -23,17 +23,6 @@
     apt:
       autoremove: yes
 
-  # journalctl
-  - name: Run journalctl and quit
-    command: journalctl
-    become: yes
-    register: journalctl_output
-
-  - name: Display journalctl output
-    debug:
-      var: journalctl_output.stdout
-
-
   # Clamav
   - name: Install ClamAV
     apt:
