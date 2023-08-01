@@ -23,6 +23,7 @@
     apt:
       autoremove: yes
 
+  # journalctl
   - name: Run journalctl and quit
     command: journalctl
     become: yes
@@ -32,16 +33,15 @@
     debug:
       var: journalctl_output.stdout
 
+  # Backup PC
   - name: Install BackupPC
     apt:
       name: backuppc
       state: present
 
-  # Backup PC
-
   - name: Create BackupPC configuration file
     template:
-      src: backuppc.conf.j2
+      src: conf/backuppc.conf.j2
       dest: /etc/backuppc/backuppc.conf
 
   - name: Start BackupPC service
