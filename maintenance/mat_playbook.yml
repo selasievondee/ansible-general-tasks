@@ -36,39 +36,39 @@
 
   # Clamav
   - name: Install ClamAV
-      apt:
-        name: clamav
-        state: present
+    apt:
+      name: clamav
+      state: present
 
-    - name: Install freshclam
-      apt:
-        name: freshclam
-        state: present
+  - name: Install freshclam
+    apt:
+      name: freshclam
+      state: present
 
-    - name: Create ClamAV configuration file
-      template:
-        src: conf/clamav.conf.j2
-        dest: /etc/clamav/clamav.conf
+  - name: Create ClamAV configuration file
+    template:
+      src: conf/clamav.conf.j2
+      dest: /etc/clamav/clamav.conf
 
-    - name: Start ClamAV service
-      service:
-        name: clamav-daemon
-        state: started
-        enabled: yes
+  - name: Start ClamAV service
+    service:
+      name: clamav-daemon
+      state: started
+      enabled: yes
 
-    - name: Start freshclam service
-      service:
-        name: freshclam
-        state: started
-        enabled: yes
+  - name: Start freshclam service
+    service:
+      name: freshclam
+      state: started
+      enabled: yes
 
-    - name: Check ClamAV service status
-      command: service clamav-daemon status
-      register: clamav_status
+  - name: Check ClamAV service status
+    command: service clamav-daemon status
+    register: clamav_status
 
-    - name: Display ClamAV service status
-      debug:
-        var: clamav_status.stdout
+  - name: Display ClamAV service status
+    debug:
+      var: clamav_status.stdout
         
   # - name: Scan for viruses and malware
   #   apt:
