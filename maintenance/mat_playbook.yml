@@ -23,47 +23,13 @@
     apt:
       autoremove: yes
 
-  # Clamav
-  - name: Install ClamAV
-    apt:
-      name: clamav
-      state: present
+  - name: Run top in batch mode
+    command: top -b -n 1
+    register: top_output
 
-  # - name: Install freshclam
-  #   apt:
-  #     name: freshclam
-  #     state: present
-
-  - name: Create ClamAV configuration file
-    template:
-      src: conf/clamav.conf.j2
-      dest: /etc/clamav/clamav.conf
-
-  - name: Start ClamAV service
-    service:
-      name: clamav-daemon
-      state: started
-      enabled: yes
-
-  # - name: Start freshclam service
-  #   service:
-  #     name: freshclam
-  #     state: started
-  #     enabled: yes
-
-  - name: Check ClamAV service status
-    command: service clamav-daemon status
-    register: clamav_status
-
-  - name: Display ClamAV service status
+  - name: Display top output
     debug:
-      var: clamav_status.stdout
-        
-  # - name: Scan for viruses and malware
-  #   apt:
-  #     name: clamav
-  #     state: present
-  #     only_if: '! dpkg -l | grep -q "^ii clamav"'
+      var: top_output.stdout
 
   # - name: Monitor the system resources
   #   command: top
