@@ -27,16 +27,16 @@
     command: top -b -n 1
     register: top_output
 
-  # - name: Display top output
-  #   debug:
-  #     var: top_output.stdout
+  - name: Display top output
+    debug:
+      var: top_output.stdout
 
-  - name: Optimize the system
-    apt:
-      name: apt-utils
-      state: present
-    command: apt-get autoclean
-    command: apt-get autoremove
+  # - name: Optimize the system
+  #   apt:
+  #     name: apt-utils
+  #     state: present
+  #   command: apt-get autoclean
+  #   command: apt-get autoremove
 
   - name: Clear temporary storage
     command: rm -rf /tmp/*
