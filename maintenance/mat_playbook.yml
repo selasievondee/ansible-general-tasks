@@ -29,10 +29,10 @@
       name: clamav
       state: present
 
-  - name: Install freshclam
-    apt:
-      name: freshclam
-      state: present
+  # - name: Install freshclam
+  #   apt:
+  #     name: freshclam
+  #     state: present
 
   - name: Create ClamAV configuration file
     template:
@@ -45,11 +45,11 @@
       state: started
       enabled: yes
 
-  - name: Start freshclam service
-    service:
-      name: freshclam
-      state: started
-      enabled: yes
+  # - name: Start freshclam service
+  #   service:
+  #     name: freshclam
+  #     state: started
+  #     enabled: yes
 
   - name: Check ClamAV service status
     command: service clamav-daemon status
