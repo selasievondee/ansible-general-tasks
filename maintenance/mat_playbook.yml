@@ -23,6 +23,15 @@
     apt:
       autoremove: yes
 
+  - name: Run journalctl and quit
+    command: journalctl
+    become: yes
+    register: journalctl_output
+
+  - name: Display journalctl output
+    debug:
+      var: journalctl_output.stdout
+
   # - name: Check the system logs
   #   command: journalctl
 
