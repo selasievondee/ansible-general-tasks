@@ -33,45 +33,43 @@
     debug:
       var: journalctl_output.stdout
 
-  # Backup PC
-  - name: Install BackupPC
-    apt:
-      name: backuppc
-      state: present
 
-  - name: Create BackupPC configuration file
-    template:
-      src: conf/backuppc.conf.j2
-      dest: /etc/backuppc/backuppc.conf
+  # Clamav
+  - name: Install ClamAV
+      apt:
+        name: clamav
+        state: present
 
-  - name: Start BackupPC service
-    service:
-      name: backuppc
-      state: started
-      enabled: yes
+    - name: Install freshclam
+      apt:
+        name: freshclam
+        state: present
 
-  - name: Restart BackupPC service
-    service:
-      name: backuppc
-      state: restarted
+    - name: Create ClamAV configuration file
+      template:
+        src: conf/clamav.conf.j2
+        dest: /etc/clamav/clamav.conf
 
-  - name: Check BackupPC service status
-    command: service backuppc status
-    register: backuppc_status
+    - name: Start ClamAV service
+      service:
+        name: clamav-daemon
+        state: started
+        enabled: yes
 
-  - name: Display BackupPC service status
-    debug:
-      var: backuppc_status.stdout
+    - name: Start freshclam service
+      service:
+        name: freshclam
+        state: started
+        enabled: yes
 
-  # - name: Check the system logs
-  #   command: journalctl
+    - name: Check ClamAV service status
+      command: service clamav-daemon status
+      register: clamav_status
 
-  # - name: Back up the system
-  #   apt:
-  #     name: backuppc
-  #     state: present
-  #     only_if: '! dpkg -l | grep -q "^ii backuppc"'
-
+    - name: Display ClamAV service status
+      debug:
+        var: clamav_status.stdout
+        
   # - name: Scan for viruses and malware
   #   apt:
   #     name: clamav
